@@ -24,12 +24,22 @@ export default async function (req, res) {
     });
     return;
   }
+  const company = req.body.company || '';
+  if (company.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid company",
+      }
+    });
+    return;
+  }
 
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(animal, company),
       temperature: 0.6,
+      max_tokens: 100,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -48,15 +58,12 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
+function generatePrompt(animal, company) {
   const capitalizedAnimal =
     animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+  return `My Name is ${capitalizedAnimal}. Write me a cold email, no longer than 300 words, that I would send to a software
+  company called ${company} for an internship position in web development. Rich Media is a digital agency that creates software
+  products like webpages, apps and videos for clients such as banks and insurance companies. I am a first year student at the 
+  univeristy of waterloo studying computer science and I have web development experience at team hackathons and personal side projects
+  using a tech stack with various html, css, and various javascript libraries like react, node, express. `;
 }
