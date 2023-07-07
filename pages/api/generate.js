@@ -15,11 +15,11 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const name = req.body.name || '';
+  if (name.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter a valid name",
       }
     });
     return;
@@ -37,10 +37,11 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal, company),
+      prompt: generatePrompt(name, company),
       temperature: 0.6,
-      max_tokens: 100,
+      max_tokens: 1000,
     });
+    console.log(completion.data.choices);
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
@@ -58,10 +59,10 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal, company) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `My Name is ${capitalizedAnimal}. Write me a cold email, no longer than 300 words, that I would send to a software
+function generatePrompt(name, company) {
+  const capitalizedname =
+    name[0].toUpperCase() + name.slice(1).toLowerCase();
+  return `My Name is ${capitalizedname}. Write me a cold email, no longer than 300 words, that I would send to a software
   company called ${company} for an internship position in web development. Rich Media is a digital agency that creates software
   products like webpages, apps and videos for clients such as banks and insurance companies. I am a first year student at the 
   univeristy of waterloo studying computer science and I have web development experience at team hackathons and personal side projects

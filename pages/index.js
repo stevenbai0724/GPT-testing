@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
   const [company, setCompany] = useState("");
   const [result, setResult] = useState();
 
@@ -15,7 +15,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput, company: company }),
+        body: JSON.stringify({ name: nameInput, company: company }),
       });
 
       const data = await response.json();
@@ -24,7 +24,7 @@ export default function Home() {
       }
 
       setResult(data.result);
-      setAnimalInput("");
+      setNameInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -44,14 +44,14 @@ export default function Home() {
         <form onSubmit={onSubmit}>
           <input
             type="text"
-            name="animal"
+            name="name"
             placeholder="Enter an name"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
           />
          <input
             type="text"
-            name="animal"
+            name="name"
             placeholder="Enter an company name"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
