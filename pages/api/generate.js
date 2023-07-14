@@ -39,10 +39,11 @@ export default async function (req, res) {
       model: "text-davinci-003",
       prompt: generatePrompt(name, company),
       temperature: 0.6,
-      max_tokens: 1000,
+      max_tokens: 2000,
     });
-    console.log(completion.data.choices);
-    res.status(200).json({ result: completion.data.choices[0].text });
+    const substrings = (completion.data.choices[0].text.split('\n')).filter((str) => str != '');
+    console.log(substrings);
+    res.status(200).json({ result: substrings });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -66,5 +67,6 @@ function generatePrompt(name, company) {
   company called ${company} for an internship position in web development. Rich Media is a digital agency that creates software
   products like webpages, apps and videos for clients such as banks and insurance companies. I am a first year student at the 
   univeristy of waterloo studying computer science and I have web development experience at team hackathons and personal side projects
-  using a tech stack with various html, css, and various javascript libraries like react, node, express. `;
+  using a tech stack with various html, css, and various javascript libraries like react, node, express. Try to go for 3 body paragraphs, and don't start
+  every single sentence with "I am". don't go beyond the skills listed before. `;
 }

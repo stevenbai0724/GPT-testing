@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 export default function Home() {
   const [nameInput, setNameInput] = useState("");
   const [company, setCompany] = useState("");
-  const [result, setResult] = useState();
+  const [result, setResult] = useState([]);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -24,6 +24,7 @@ export default function Home() {
       }
 
       setResult(data.result);
+      console.log(data.result)
       setNameInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -40,7 +41,6 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h3>Email generator</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
@@ -49,7 +49,7 @@ export default function Home() {
             value={nameInput}
             onChange={(e) => setNameInput(e.target.value)}
           />
-         <input
+          <input
             type="text"
             name="name"
             placeholder="Enter an company name"
@@ -58,7 +58,17 @@ export default function Home() {
           />
           <input type="submit" value="Generate Email" />
         </form>
-        <div className={styles.result}>{result}</div>
+        <div>
+          
+        {
+          result.map((str, id) => {
+            
+              return <h4 key={id}> {str} </h4>
+            
+          })
+        }
+        </div>
+      
       </main>
     </div>
   );
